@@ -19,12 +19,12 @@ class UserController extends Controller
                 
                 $token = auth()->user()->createToken('user')->accessToken;
                 $user = auth()->user();
-                return response()->json(['status' => 'success', 'access_token' => $token, 'user' => $user]);
+                return response()->json(['status' => true, 'access_token' => $token, 'user' => $user]);
             } else {
-                return response()->json(['status' => 'error', 'message' => 'Invalid email/password']);
+                return response()->json(['status' => false, 'message' => 'Invalid email/password']);
             }
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 

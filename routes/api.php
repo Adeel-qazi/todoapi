@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
+
+
+Route::post('login',[UserController::class, 'login']);
 
 //main middleware to authenticate
 Route::group(['middleware'=> 'auth:api'],function(){
@@ -33,13 +33,9 @@ Route::group(['middleware'=> 'auth:api'],function(){
 
         Route::resource('clients',ClientController::class);
         Route::resource('teams',TeamController::class);
-
-
     });
 });
 
 
 
 
-Route::post('login',[UserController::class, 'login']);
-// Route::get('logout',[UserController::class, 'logout']);
