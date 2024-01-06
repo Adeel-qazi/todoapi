@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ApproveClientRequest;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Mail\SendCredentialUser;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -24,6 +26,59 @@ class ClientController extends Controller
         }
     }
 
+    public function approved($userId)
+    {
+        try {
+            $loggedInUser = auth()->user();
+    
+            if ($loggedInUser->role == 'admin') {
+                $user = User::where('id', $userId)->where('role', 'client')->first();
+            } elseif ($loggedInUser->role == 'client') {
+                $user = User::where('id', $userId)->where('role', 'team')->first();
+            } else {
+                return response()->json(['success' => false, 'message' => 'Permission denied.'], 403);
+            }
+    
+            if ($user) {
+                $user->update(['email_verified' => 1]);
+                return response()->json(['success' => true, 'message' => 'User approved successfully.', 'user' => $user], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'User not found.'], 404);
+            }
+    
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
+    
+    
+
+
+    public function disApproved($userId)
+    {
+        try {
+            $loggedInUser = auth()->user();
+    
+            if ($loggedInUser->role == 'admin') {
+                $user = User::where('id', $userId)->where('role', 'client')->first();
+            } elseif ($loggedInUser->role == 'client') {
+                $user = User::where('id', $userId)->where('role', 'team')->first();
+            } else {
+                return response()->json(['success' => false, 'message' => 'Permission denied.'], 403);
+            }
+    
+            if ($user) {
+                $user->update(['email_verified' => 0]);
+                return response()->json(['success' => true, 'message' => 'User disapproved successfully.', 'user' => $user], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'User not found.'], 404);
+            }
+    
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
+    
     /**
      * Show the form for creating a new resource.
      */

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminSubscribeRequest;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 
@@ -26,9 +27,19 @@ class SubscriptionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AdminSubscribeRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        try {
+            $user = auth()->user();
+            if($user->role == 'admin'){
+                $validatedData['admin_id'] = $user->id;
+                $subscription = Subscription::create($validatedData);
+                return response()->json(['success' => true, 'message' => 'Package has been created', 'package' => $subscription], 200);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['status' => false, 'message' => $th->getMessage()], 500);
+        }
     }
 
     /**

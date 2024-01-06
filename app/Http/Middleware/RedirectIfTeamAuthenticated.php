@@ -15,6 +15,12 @@ class RedirectIfTeamAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!auth()->user()->role == 'team') {
+            return response()->json([
+                'status' => false,
+                'message' => 'You dont have access',
+            ], 500);
+        }
         return $next($request);
     }
 }

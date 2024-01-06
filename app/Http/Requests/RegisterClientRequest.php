@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class StoreClientRequest extends FormRequest
+class RegisterClientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,6 @@ class StoreClientRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'password' => ['required','confirmed',Password::min(5)],
             'role' => 'required|in:client',
-            'email_verified' => 'required|boolean'
          ];
     }
 
@@ -46,10 +45,6 @@ class StoreClientRequest extends FormRequest
         'password.min' => 'The :attribute field must be at least :min characters',
         'role.required' => 'The :attribute field is required',
         'role.in' => 'The selected :attribute is invalid',
-        'email_verified.required' => 'The :attribute field is required',
-        'email_verified.boolean' => 'The :attribute field must be a boolean either true or false',
-        
-
     ];
 }
 
@@ -61,8 +56,6 @@ class StoreClientRequest extends FormRequest
             'email' => 'email address',
             'password' => 'password',
             'role' => 'user role',
-            'email_verified' => 'email verification status',
         ];
     }
-
 }

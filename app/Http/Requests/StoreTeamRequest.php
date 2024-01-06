@@ -25,7 +25,7 @@ class StoreTeamRequest extends FormRequest
         return [
             'name'  =>'required|string|min:3',
             'email' => 'required|email|unique:users',
-            'password' => ['required','confirmed',Password::min(3)],
+            'password' => ['required','confirmed',Password::min(5)],
             'role' => 'required|in:team',
             'email_verified' => 'required|boolean'
          ];

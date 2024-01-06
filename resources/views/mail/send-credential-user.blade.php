@@ -11,7 +11,7 @@
     <p>Your account has been created with the following credentials:</p>
     
     <p><strong>Email:</strong> {{ $user['email'] }}</p>
-    <p><strong>Password:</strong> {{ $password }}</p>
+    <p><strong>Password:</strong> {{ ($password) ? $password : '' }}</p>
     
     <p>Please login using these credentials.</p>
     
