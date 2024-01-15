@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
@@ -33,12 +35,20 @@ Route::group(['middleware'=> 'auth:api'],function(){
         Route::get('/dashboard',[UserController::class,'dashboard']);
         Route::get('profile/{userId}',[UserController::class,'show']);
         Route::put('profile/{userId}',[UserController::class,'update']);
-
+ 
+        //client
         Route::resource('clients',ClientController::class);
+
         Route::get('approved/{clientId}',[ClientController::class, 'approved']);
         Route::get('disapprove/{clientId}',[ClientController::class, 'disApproved']);
+
+        //client event by admin
+         Route::resource('events',EventController::class);
+
+        //team
         Route::resource('teams',TeamController::class);
 
+        //subscription
         Route::resource('subscriptions',SubscriptionController::class);
     });
 
@@ -53,18 +63,28 @@ Route::group(['middleware'=> 'auth:api'],function(){
         Route::resource('teams',TeamController::class);
         Route::get('approved/{userId}',[ClientController::class, 'approved']);
         Route::get('disapprove/{userId}',[ClientController::class, 'disApproved']);
+
+        //events
+        Route::resource('events',EventController::class);
+
+       
+    });
+    
+    
+    //Team authenticate
+    Route::group(['middleware'=>'team'],function(){
+        Route::get('/dashboard',[UserController::class,'dashboard']);
+        Route::get('profile/{userId}',[UserController::class,'show']);
+        Route::put('profile/{userId}',[UserController::class,'update']);
+        
+         //appointments
+        Route::post('appointments/store',[AppointmentController::class,'store']);
+        Route::put('appointments/booked/{slotId}',[AppointmentController::class,'bookedSlot']);
+        // Route::get('appointments/edit/{event}',[AppointmentController::class,'edit']);
     });
 
 
-        //Team authenticate
-        Route::group(['middleware'=>'team'],function(){
-            Route::get('/dashboard',[UserController::class,'dashboard']);
-            Route::get('profile/{userId}',[UserController::class,'show']);
-            Route::put('profile/{userId}',[UserController::class,'update']);
-        });
-
-
-
+    
 });
 
 

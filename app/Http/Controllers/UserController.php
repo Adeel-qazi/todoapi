@@ -34,7 +34,7 @@ class UserController extends Controller
     {
         try {
             $validatedData = $request->validated();
-        
+            
             if (Auth::attempt(["email" => $validatedData["email"], "password" => $validatedData["password"]])) {
                 $user = auth()->user();
         

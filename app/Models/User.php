@@ -14,8 +14,21 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
 
-    public function setPasswordAttribute($value){
+    public function setPasswordAttribute($value)
+    {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    //client
+    public function events()
+    {
+        return $this->hasMany(Event::class,'client_id','id');
+    }
+
+    //team
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class,'team_id');
     }
 
     public function subscriptions()

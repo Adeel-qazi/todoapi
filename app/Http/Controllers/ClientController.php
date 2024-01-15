@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ApprovedClient;
 use App\Http\Requests\ApproveClientRequest;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
@@ -41,6 +42,7 @@ class ClientController extends Controller
     
             if ($user) {
                 $user->update(['email_verified' => 1]);
+                event(new ApprovedClient($user->id));
                 return response()->json(['success' => true, 'message' => 'User approved successfully.', 'user' => $user], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'User not found.'], 404);
@@ -69,6 +71,7 @@ class ClientController extends Controller
     
             if ($user) {
                 $user->update(['email_verified' => 0]);
+                event(new ApprovedClient($user->id));
                 return response()->json(['success' => true, 'message' => 'User disapproved successfully.', 'user' => $user], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'User not found.'], 404);
