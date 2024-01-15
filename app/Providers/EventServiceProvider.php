@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\ApprovedClient;
+use App\Listeners\SendMailClient;
+use App\Observers\EventObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ApprovedClient::class => [
+            SendMailClient::class,
+        ],
     ];
 
     /**
@@ -25,7 +31,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \App\Models\Event::observe(EventObserver::class);
     }
 
     /**
